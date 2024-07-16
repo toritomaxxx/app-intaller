@@ -29,7 +29,7 @@ app.whenReady().then(() => {
   
 
   ipcMain.handle("browser-device", () => {
-    console.log(browserDevice());
+   return browserDevice()
   });
   createWindow();
   app.on("activate", () => {

@@ -5,50 +5,72 @@
     <link rel="stylesheet" href="./styles/index.css" />
   </head>
   <body>
-    <div class="header">
-      <img
-        src="./assets/icons/setting.svg"
-        alt="setting"
-        class="button-setting"
-      />
-      <label class="custom-select" id="select">
-        <select  name="options">
-          <option value="" disabled selected>Selecciona un dispositivo</option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-          <option value="4">Option 4</option>
-        </select>
-        </label
-      >
-    </div>
-    
-    <div class="wrapper">
-      <h2>Opciones</h2>
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-        "
-      >
-        <a href="#" class="btn6">Todo</a>
-        <a href="#" class="btn6">PDFs</a>
-        <a href="#" class="btn6">Apps</a>
-        <a href="#" class="btn6">Backgrounds</a>
+    <div id="trueDevice">
+      <div>
+        <img
+          src="./assets/icons/setting.svg"
+          alt="setting"
+          class="button-setting"
+        />
+        <label class="custom-select" id="select">
+          <select name="options">
+            <option value="" disabled selected>
+              Selecciona un dispositivo
+            </option>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+            <option value="4">Option 4</option>
+          </select>
+        </label>
       </div>
+
+      <div class="wrapper">
+        <h2>Opciones</h2>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+          "
+        >
+          <a href="#" class="btn6">Todo</a>
+          <a href="#" class="btn6">PDFs</a>
+          <a href="#" class="btn6">Apps</a>
+          <a href="#" class="btn6">Backgrounds</a>
+        </div>
+      </div>
+    </div>
+    <div
+      id="falseDevice"
+      style="
+        margin: 0 auto;
+        display: flex;
+        align-content: center;
+        height: 100%;
+        text-align: center;
+      "
+    >
+      <p style="font-size: 30px; color: rgb(255, 107, 107)">
+        Sin dispositivos disponibles
+      </p>
+      <img
+        src="./assets/icons/reload.svg"
+        alt="reload"
+        class="button-reload"
+        onclick = "updateDevices()"
+      />
     </div>
     <script>
       function ocultarElemento() {
-        if (false) {
-          document.getElementById('select').style.display = 'none';
+        if (true) {
+          document.getElementById("select").style.display = "none";
         }
       }
       ocultarElemento();
     </script>
     <script src="./renderer.js">
-      func()
     </script>
   </body>
 </html>

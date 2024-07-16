@@ -1,11 +1,12 @@
 const { ipcMain } = require("electron");
 const { execSync } = require("child_process");
 const os = require("os");
-const adbWindows = ".\ADB\Windows\adb.exe";
-const adbLinux = "./ADB/Linux/adb";
+const adbWindows = "./src/ADB/Windows/adb.";
+const adbLinux = "./src/ADB/Linux/adb";
 const deviceList = [];
 const selectedDeviceName = "";
 const selectedDeviceID = "";
+
 
 const browserDevice = () => {
   let ADB = "";
@@ -25,18 +26,7 @@ const browserDevice = () => {
         return;
       }
       const deviceID = device.split("\t")[0];
-      console.log(deviceID);
-      let model = execSync(
-        `${ADB}` +
-          " " +
-          "-s" +
-          " " +
-          `${deviceID}` +
-          " " +
-          "shell" +
-          " " +
-          "getprop ro.product.model"
-      )
+      let model = execSync(`${ADB}`+" " +"-s" +" " +`${deviceID}` +" " +"shell" +" " +"getprop ro.product.model")
         .toString()
         .split("\n")[0];
       model = model.split("\n")[0];
