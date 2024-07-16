@@ -38,8 +38,7 @@ h2{
 /* Wrapper Is not Needed| Just for demo purpose.  */
 .wrapper {
   text-align: center;
-  width: 100%;
-  position: relative;
+
 }
 
 
@@ -103,7 +102,7 @@ h2{
 
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 2px;
 }
 
 ::-webkit-scrollbar-track {
@@ -116,45 +115,56 @@ h2{
 }
 
 .custom-select {
-  position: relative;
-  display: block;
-  max-width: 400px;
-  min-width: 180px;
-  margin: 0 auto;
+  position: absolute;
+  width: 190px;
+  margin: 10 auto;
   border: 1px solid #3C1C78;
   background-color: #16013E;
   z-index: 10;
-  border-radius: 10px;
+  border-radius: 8px;
+  right: 8px;
+  top: 8px;
 }
 .custom-select select {
   border: none;
   outline: none;
   background: transparent;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
   border-radius: 0;
   margin: 0;
-  display: block;
-  width: 100%;
-  padding: 12px 55px 15px 15px;
-  font-size: 14px;
+  padding: 4px 40px 4px 8px;
+  font-size: 12px;
   color: #714BB9;
-  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+
 }
 .custom-select:after {
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 50px;
-  height: 100%;
-  line-height: 38px;
-  content: "∨";
-  text-align: center;
+  content: "v";
   color: #714BB9;
-  font-size: 24px;
-  border-left: 1px solid #3C1C78;
+  font-size: 18px;
+  right: 8px;
   z-index: -1;
+  top: 0px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-setting {
+  width: 20px;
+  height: 20px;
+}
+.button-setting:hover {
+  cursor: pointer;
+  box-shadow: 0 0 8px #6098FF;
+  border-radius: 50%;
+  
 }
 
 

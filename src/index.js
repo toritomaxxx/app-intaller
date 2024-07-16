@@ -5,10 +5,10 @@ const {browserDevice} = require("./ipcFuntions");
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 250,
-    height: 300,
-    // autoHideMenuBar: true,
-    frame: false,
+    width: 700,
+    height: 380,
+    autoHideMenuBar: true,
+    frame: true,
     webPreferences: {
       preload: path.join(__dirname, "./preload.js"),
       nodeIntegration: true,
@@ -16,7 +16,7 @@ const createWindow = () => {
       enableRemoteModule: true,
       devTools: true,
     },
-    // resizable: false,
+    resizable: false,
   });
 
   // and load the index.html of the app.
