@@ -19,6 +19,24 @@ const createWindow = () => {
     resizable: false,
   });
 
+
+  const configWindow = new BrowserWindows({
+    width: 300,
+    height: 380,
+    title: "Configuracion",
+  });
+  configWindow.setMenu(null);
+
+  configWindow.loadURL(url.format({
+    pathname: path.join(__dirname, "config.html"),
+    protocol: "file",
+    slashes: true,
+  }))
+  configWindow.on("close", () => {
+    configWindow = null;
+  });
+
+
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 
