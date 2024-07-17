@@ -1,17 +1,16 @@
 const { ipcMain } = require("electron");
-const { execSync } = require("child_process");
+const { execSync} = require("child_process");
 const os = require("os");
-const adbWindows = "./src/ADB/Windows/adb.";
+const adbWindows = "./src/ADB/Windows/adb.exe";
 const adbLinux = "./src/ADB/Linux/adb";
-const deviceList = [];
-const selectedDeviceName = "";
-const selectedDeviceID = "";
+let deviceList = [];
+let ADB = "";
 
 
 const browserDevice = () => {
-  let ADB = "";
+  deviceList = [];
   if (os.platform() === "win32") {
-    ADB = adbWindows;
+    ADB = `"${adbWindows}"`;
   } else {
     ADB = adbLinux;
   }
@@ -26,10 +25,9 @@ const browserDevice = () => {
         return;
       }
       const deviceID = device.split("\t")[0];
-      let model = execSync(`${ADB}`+" " +"-s" +" " +`${deviceID}` +" " +"shell" +" " +"getprop ro.product.model")
-        .toString()
-        .split("\n")[0];
+      let model = execSync(`${ADB}`+" " +"-s" +" " +`${deviceID}` +" " +"shell" +" " +"getprop ro.product.model").toString().split("\n")[0];
       model = model.split("\n")[0];
+      model = model.split("\r")[0];
       deviceList.push({ id: deviceID, model: model });
     });
   } catch (error) {

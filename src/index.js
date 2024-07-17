@@ -5,7 +5,7 @@ const {browserDevice} = require("./ipcFuntions");
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 700,
+    width: 300,
     height: 380,
     autoHideMenuBar: true,
     frame: true,

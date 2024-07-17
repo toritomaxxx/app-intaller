@@ -12,7 +12,7 @@
           alt="setting"
           class="button-setting"
         />
-        <label class="custom-select" id="select">
+        <label class="custom-select" id="moreDevice">
           <select name="options">
             <option value="" disabled selected>
               Selecciona un dispositivo
@@ -21,8 +21,18 @@
             <option value="2">Option 2</option>
             <option value="3">Option 3</option>
             <option value="4">Option 4</option>
+
+            
           </select>
+          
         </label>
+        <div 
+          id="anyDevice"
+          class="any-device"
+        >
+          <div id="deviceName"></div>
+          <div id="deviceID"></div>
+        </div>
       </div>
 
       <div class="wrapper">
@@ -62,14 +72,6 @@
         onclick = "updateDevices()"
       />
     </div>
-    <script>
-      function ocultarElemento() {
-        if (true) {
-          document.getElementById("select").style.display = "none";
-        }
-      }
-      ocultarElemento();
-    </script>
     <script src="./renderer.js">
     </script>
   </body>

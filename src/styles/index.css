@@ -19,7 +19,7 @@
 }
 html {
   height: 100%;
-  margin: 0;
+  margin:0;
 }
 body {
   background: #00002e;
@@ -27,7 +27,7 @@ body {
   font-family: sans-serif;
   font-size: 16px;
   height: 100%;
-  margin: 0;
+  margin:0;
 }
 h2 {
   font-size: 25px;
@@ -165,6 +165,31 @@ h2 {
   top: 0px;
 }
 
+.any-device {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  color: #6098ff;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px #6098ff;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  text-align: end;
+  flex-direction: row;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #3c1c78;
+  transition: 0.3s;
+  &:hover {
+    background-color: #3c1c78;
+  }
+
+}
+
 .header {
   display: flex;
   flex-direction: row;
@@ -175,6 +200,7 @@ h2 {
 .button-setting {
   width: 20px;
   height: 20px;
+  margin: 8px;
 }
 .button-setting:hover {
   cursor: pointer;
