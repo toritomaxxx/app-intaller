@@ -1,9 +1,20 @@
-const { app, shell, BrowserWindow ,ipcMain} = require("electron");
+const { app, BrowserWindow ,ipcMain} = require("electron");
 const path = require("node:path");
 const {browserDevice} = require("./ipcFuntions");
 
+
+
+if(process.env.NODE_ENV !== "production"){
+  require("electron-reload")(__dirname, {
+    electron: path.join(__dirname, "../node_modules", ".bin", "electron"),
+    hardResetMethod: "exit",
+  });
+}
+
+
+
 const createWindow = () => {
-  // Create the browser window.
+
   const mainWindow = new BrowserWindow({
     width: 300,
     height: 380,
@@ -20,32 +31,10 @@ const createWindow = () => {
   });
 
 
-  const configWindow = new BrowserWindows({
-    width: 300,
-    height: 380,
-    title: "Configuracion",
-  });
-  configWindow.setMenu(null);
-
-  configWindow.loadURL(url.format({
-    pathname: path.join(__dirname, "config.html"),
-    protocol: "file",
-    slashes: true,
-  }))
-  configWindow.on("close", () => {
-    configWindow = null;
-  });
-
-
-  // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "index.html"));
-
-  // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
 app.whenReady().then(() => {
-  
-
   ipcMain.handle("browser-device", () => {
    return browserDevice()
   });

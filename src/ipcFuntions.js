@@ -1,4 +1,4 @@
-const { ipcMain } = require("electron");
+const { app, shell, BrowserWindow ,ipcMain} = require("electron");
 const { execSync} = require("child_process");
 const os = require("os");
 const adbWindows = "./src/ADB/Windows/adb.exe";
@@ -36,4 +36,34 @@ const browserDevice = () => {
   return deviceList;
 };
 
-module.exports = { browserDevice };
+const configWindows = () => {
+  console.log("config window");
+  const configWindow = new BrowserWindow({
+    width: 300,
+    height: 380,
+    title: "Configuracion",
+  });
+  configWindow.setMenu(null);
+  configWindow.loadURL(url.format({
+    pathname: path.join(__dirname, "config.html"),
+    protocol: "file",
+    slashes: true,
+  }))
+  configWindow.on("close", () => {
+    configWindow = null;
+  });
+  configWindow.show();
+}
+
+const openConfigWindows = () => {
+  ipcMain.handle("config-windows", () => {
+    return configWindows();
+  });
+
+}
+
+module.exports = { 
+  browserDevice,
+  openConfigWindows
+
+ };

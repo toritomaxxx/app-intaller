@@ -2,7 +2,6 @@ let device = []
 const func = async () => {
     const response = await window.versions.device()
     console.log(response)
-
     return response 
   }
   
@@ -13,7 +12,6 @@ const func = async () => {
   }
 
 function toggleDevices(devices){
-
   if(
     devices.length === 0
   ) {
@@ -50,6 +48,13 @@ function toggleDevices(devices){
       
     }
   }
+}
+
+const openConfigWindows = async  () => {
+  const response = await window.config.config()
+  console.log(response)
+  return response 
+
 }
 
 updateDevices()
