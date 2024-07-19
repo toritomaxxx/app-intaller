@@ -7,52 +7,46 @@
   <body>
     <div id="trueDevice">
       <div>
-        <img
-          src="./assets/icons/setting.svg"
-          alt="setting"
-          class="button-setting"
-          onclick="openConfigWindows()"
-        />
-        <label class="custom-select" id="moreDevice">
-          <select name="options">
-            <option value="" disabled selected>
-              Selecciona un dispositivo
-            </option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-            <option value="4">Option 4</option>
-
-            
-          </select>
-          
-        </label>
-        <div 
-          id="anyDevice"
-          class="any-device"
-        >
-          <div id="deviceName"></div>
-          <div id="deviceID"></div>
-        </div>
+        <a href="config.html">
+          <img
+            src="./assets/icons/setting.svg"
+            alt="setting"
+            class="button-setting"
+          />
+        </a>
       </div>
-
-      <div class="wrapper">
-        <h2>Opciones</h2>
-        <div
-          style="
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-          "
-        >
-          <a href="#" class="btn6">Todo</a>
-          <a href="#" class="btn6">PDFs</a>
-          <a href="#" class="btn6">Apps</a>
-          <a href="#" class="btn6">Backgrounds</a>
-        </div>
+      <label class="custom-select" id="moreDevice">
+        <select name="options">
+          <option value="" disabled selected>Selecciona un dispositivo</option>
+          <option value="1">Option 1</option>
+          <option value="2">Option 2</option>
+          <option value="3">Option 3</option>
+          <option value="4">Option 4</option>
+        </select>
+      </label>
+      <div id="anyDevice" class="any-device">
+        <div id="deviceName"></div>
+        <div id="deviceID"></div>
       </div>
     </div>
+
+    <div class="wrapper">
+      <h2>Opciones</h2>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        "
+      >
+        <a href="#" class="btn6">Todo</a>
+        <a href="#" class="btn6">PDFs</a>
+        <a href="#" class="btn6">Apps</a>
+        <a href="#" class="btn6">Backgrounds</a>
+      </div>
+    </div>
+
     <div
       id="falseDevice"
       style="
@@ -70,12 +64,9 @@
         src="./assets/icons/reload.svg"
         alt="reload"
         class="button-reload"
-        onclick = "updateDevices()"
+        onclick="updateDevices()"
       />
     </div>
-    <script src="./renderer.js">
-    </script>
-
-
+    <script src="./renderer.js"></script>
   </body>
 </html>

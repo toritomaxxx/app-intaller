@@ -16,7 +16,7 @@ if(process.env.NODE_ENV !== "production"){
 const createWindow = () => {
 
   const mainWindow = new BrowserWindow({
-    width: 300,
+    width: 600,
     height: 380,
     autoHideMenuBar: true,
     frame: true,
@@ -34,6 +34,7 @@ const createWindow = () => {
   mainWindow.loadFile(path.join(__dirname, "index.html"));
   mainWindow.webContents.openDevTools();
 };
+
 app.whenReady().then(() => {
   ipcMain.handle("browser-device", () => {
    return browserDevice()

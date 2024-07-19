@@ -36,34 +36,10 @@ const browserDevice = () => {
   return deviceList;
 };
 
-const configWindows = () => {
-  console.log("config window");
-  const configWindow = new BrowserWindow({
-    width: 300,
-    height: 380,
-    title: "Configuracion",
-  });
-  configWindow.setMenu(null);
-  configWindow.loadURL(url.format({
-    pathname: path.join(__dirname, "config.html"),
-    protocol: "file",
-    slashes: true,
-  }))
-  configWindow.on("close", () => {
-    configWindow = null;
-  });
-  configWindow.show();
-}
 
-const openConfigWindows = () => {
-  ipcMain.handle("config-windows", () => {
-    return configWindows();
-  });
-
-}
 
 module.exports = { 
   browserDevice,
-  openConfigWindows
+
 
  };

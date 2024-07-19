@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./styles/index.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="header">
+        <div class="header__menu">
+          <a href="index.html">
+            <img
+              src="./assets/icons/arrowLeft.svg"
+              alt="arrow"
+              class="button-arrow"
+            />
+          </a>
+        </div>
+      </div>
+    </header>
+    <div class="wrapper">
+      <h3>Cargar Rutas</h3>
+      <div class="container-input">
+        <input
+          type="file"
+          name="file-1"
+          id="file-1"
+          class="input-file inputfile-1"
+          data-multiple-caption="{count} archivos seleccionados"
+          multiple
+        />
+        <label for="file-1">
+            <span class="iborrainputfile">
+              <img
+                src="./assets/icons/upload-file.svg"
+                alt="folder"
+                class="file-icon"
+              />
+            Seleccionar archivo
+        </span>
+        </label>
+      </div>
+      <div>
+        <h4>Selecciona la carpeta que contiene los APK</h4>
+        <input
+          type="file"
+          id="file"
+          onchange="
+                    for (let i = 0; i < this.files.length; i++) {
+                        console.log(this.files[i].webkitRelativePath);
+                    }
+                "
+          webkitdirectory
+          directory
+        />
+      </div>
+      <div>
+        <h4>Selecciona la carpeta que contiene los documentos</h4>
+        <input
+          type="file"
+          id="file"
+          onchange="
+                    for (let i = 0; i < this.files.length; i++) {
+                        console.log(this.files[i].webkitRelativePath);
+                    }
+                "
+          webkitdirectory
+          directory
+        />
+      </div>
+      <div>
+        <h4>Selecciona la carpeta que contiene las imagenes</h4>
+
+        <input
+          type="file"
+          id="file"
+          onchange="
+                    for (let i = 0; i < this.files.length; i++) {
+                        console.log(this.files[i].webkitRelativePath);
+                    }
+                "
+          webkitdirectory
+          directory
+        />
+      </div>
+    </div>
+  </body>
+</html>
