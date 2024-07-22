@@ -1,35 +1,36 @@
-let device = []
+
+
+let device = [];
+var config = {};
+
+
+
 const func = async () => {
-    const response = await window.versions.device()
-    console.log(response)
-    return response 
-  }
-  
+  const response = await window.versions.device();
+  console.log(response);
+  return response;
+};
 
-  const updateDevices = async () => {
-    const devices = await func()
-    toggleDevices(devices)
-  }
+const updateDevices = async () => {
+  const devices = await func();
+  toggleDevices(devices);
+};
 
-function toggleDevices(devices){
-  if(
-    devices.length === 0
-  ) {
+function toggleDevices(devices) {
+  if (devices.length === 0) {
     document.getElementById("trueDevice").style.display = "none";
     document.getElementById("falseDevice").style.display = "block";
-  }
-  else {
+  } else {
     document.getElementById("trueDevice").style.display = "block";
     document.getElementById("falseDevice").style.display = "none";
-
+    
     if (devices.length === 1) {
       document.getElementById("anyDevice").style.display = "block";
       document.getElementById("moreDevice").style.display = "none";
-      device = devices[0]
+      device = devices[0];
       document.getElementById("deviceName").innerHTML = device.model;
       document.getElementById("deviceID").innerHTML = device.id;
-    }
-    else if (devices.length !== 1) {
+    } else if (devices.length !== 1) {
       document.getElementById("anyDevice").style.display = "none";
       document.getElementById("moreDevice").style.display = "block";
       let deviceList = document.getElementById("deviceList");
@@ -38,23 +39,35 @@ function toggleDevices(devices){
         let li = document.createElement("li");
         li.innerHTML = device.model;
         li.setAttribute("id", device.id);
-        li.onclick = function() {
-          device = device
+        li.onclick = function () {
+          device = device;
           document.getElementById("deviceName").innerHTML = device.model;
           document.getElementById("deviceID").innerHTML = device.id;
-        }
+        };
         deviceList.appendChild(li);
       });
-      
     }
   }
 }
 
-const openConfigWindows = async  () => {
-  const response = await window.config.config()
-  console.log(response)
-  return response 
 
+
+
+
+function updateConfig(key, inputElement) {
+  if (inputElement.files.length > 0) {
+    const fullPath = inputElement.files[0].path; 
+    const folderPath = fullPath.substring(0, fullPath.lastIndexOf('\\')); 
+    config[key] = folderPath;
+    inputElement.nextElementSibling.innerHTML = folderPath;
+    console.log(config);
+  }
 }
 
-updateDevices()
+
+
+function saveConfig() {
+  ipcRenderer.send('save-config', config);
+}
+
+updateDevices();

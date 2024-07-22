@@ -21,69 +21,46 @@
     </header>
     <div class="wrapper">
       <h3>Cargar Rutas</h3>
-      <div class="container-input">
+      <div class="button-file-container">
         <input
           type="file"
-          name="file-1"
-          id="file-1"
-          class="input-file inputfile-1"
-          data-multiple-caption="{count} archivos seleccionados"
-          multiple
+          id="file-apk"
+          onchange="updateConfig('apk', this)"
+          webkitdirectory
+          directory
+          style="display: none;"
         />
-        <label for="file-1">
-            <span class="iborrainputfile">
-              <img
-                src="./assets/icons/upload-file.svg"
-                alt="folder"
-                class="file-icon"
-              />
-            Seleccionar archivo
-        </span>
+        <label for="file-apk" class="button-file">
+          <img src="./assets/icons/upload-file.svg" alt="folder" class="file-icon" />
+          <h4>Selecciona la carpeta que contiene los APK</h4>
+        </label>
+        <input
+          type="file"
+          id="file-docs"
+          onchange="updateConfig('docs', this)"
+          webkitdirectory
+          directory
+          style="display: none;"
+        />
+        <label for="file-docs" class="button-file">
+          <img src="./assets/icons/upload-file.svg" alt="folder" class="file-icon" />
+          <h4>Selecciona la carpeta que contiene los documentos</h4>
+        </label>
+        <input
+          type="file"
+          id="file-backgrounds"
+          onchange="updateConfig('backgrounds', this)"
+          webkitdirectory
+          directory
+          style="display: none;"
+        />
+        <label for="file-backgrounds" class="button-file">
+          <img src="./assets/icons/upload-file.svg" alt="folder" class="file-icon" />
+          <h4>Selecciona la carpeta que contiene los fondos</h4>
         </label>
       </div>
-      <div>
-        <h4>Selecciona la carpeta que contiene los APK</h4>
-        <input
-          type="file"
-          id="file"
-          onchange="
-                    for (let i = 0; i < this.files.length; i++) {
-                        console.log(this.files[i].webkitRelativePath);
-                    }
-                "
-          webkitdirectory
-          directory
-        />
-      </div>
-      <div>
-        <h4>Selecciona la carpeta que contiene los documentos</h4>
-        <input
-          type="file"
-          id="file"
-          onchange="
-                    for (let i = 0; i < this.files.length; i++) {
-                        console.log(this.files[i].webkitRelativePath);
-                    }
-                "
-          webkitdirectory
-          directory
-        />
-      </div>
-      <div>
-        <h4>Selecciona la carpeta que contiene las imagenes</h4>
-
-        <input
-          type="file"
-          id="file"
-          onchange="
-                    for (let i = 0; i < this.files.length; i++) {
-                        console.log(this.files[i].webkitRelativePath);
-                    }
-                "
-          webkitdirectory
-          directory
-        />
-      </div>
+      <a id="save-config-reply" class="btn6" onclick="saveConfig()">Guardar</a>
     </div>
+    <script src="./renderer.js"></script>
   </body>
-</html>
+  </html>
