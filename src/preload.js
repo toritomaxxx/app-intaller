@@ -1,8 +1,9 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('versions', {
-  device: () => ipcRenderer.invoke('browser-device')
-})
-ipcRenderer.on('save-config-reply', (event, message) => {
-  console.log(message);
+  device: () => ipcRenderer.invoke('browser-device'),
+  version: () => ipcRenderer.invoke('system'),
+  config: (config) => ipcRenderer.invoke('save-config', config),
+  getConfig: () => ipcRenderer.invoke('get-config')
 });
+

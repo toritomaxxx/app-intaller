@@ -1,7 +1,6 @@
 const { app, BrowserWindow ,ipcMain} = require("electron");
-const fs = require('fs');
 const path = require("node:path");
-const {browserDevice} = require("./ipcFuntions");
+const {browserDevice,system,saveConfigJson,getConfigJson} = require("./ipcFuntions");
 
 
 
@@ -37,22 +36,27 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
+
   ipcMain.handle("browser-device", () => {
    return browserDevice()
   });
+
+  ipcMain.handle("system", () => {
+    return system()
+   });
+
+   ipcMain.handle("save-config", (event , config) => {
+    console.log(config);
+    return saveConfigJson(config)
+   });
+   ipcMain.handle("get-config", () => {
+    console.log ();
+    return getConfigJson()
+    });
+
+
   createWindow();
   
-  ipcMain.on('save-config', (event, config) => {
-    const jsonString = JSON.stringify(config, null, 2);
-    fs.writeFile('config.json', jsonString, (err) => {
-      if (err) {
-        event.reply('save-config-reply', 'Error al guardar el archivo JSON');
-      } else {
-        event.reply('save-config-reply', 'Archivo JSON guardado correctamente');
-      }
-    });
-  });
-
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();

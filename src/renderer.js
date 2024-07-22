@@ -1,13 +1,8 @@
-
-
 let device = [];
 var config = {};
 
-
-
 const func = async () => {
   const response = await window.versions.device();
-  console.log(response);
   return response;
 };
 
@@ -23,7 +18,7 @@ function toggleDevices(devices) {
   } else {
     document.getElementById("trueDevice").style.display = "block";
     document.getElementById("falseDevice").style.display = "none";
-    
+
     if (devices.length === 1) {
       document.getElementById("anyDevice").style.display = "block";
       document.getElementById("moreDevice").style.display = "none";
@@ -50,24 +45,38 @@ function toggleDevices(devices) {
   }
 }
 
-
-
-
-
-function updateConfig(key, inputElement) {
+async function updateConfig(key, inputElement) {
   if (inputElement.files.length > 0) {
-    const fullPath = inputElement.files[0].path; 
-    const folderPath = fullPath.substring(0, fullPath.lastIndexOf('\\')); 
+    const fullPath = inputElement.files[0].path;
+    if (await window.versions.version()) {
+      var folderPath = fullPath.substring(0, fullPath.lastIndexOf("\\"));
+    } else {
+      var folderPath = fullPath.substring(0, fullPath.lastIndexOf("/"));
+    }
     config[key] = folderPath;
     inputElement.nextElementSibling.innerHTML = folderPath;
-    console.log(config);
   }
 }
 
+async function saveConfig() {
+  await window.versions.config(config);
+}
 
-
-function saveConfig() {
-  ipcRenderer.send('save-config', config);
+async function getConfig() {
+  config = await window.versions.getConfig();
+  if (config.apk !== undefined) {
+    document.getElementById("file-apk").nextElementSibling.innerHTML = config.apk;
+    return;
+  }
+  if (config.docs !== undefined) {
+    document.getElementById("file-docs").nextElementSibling.innerHTML = config.docs;
+    return;
+  }
+  if (config.backgrounds !== undefined) {
+    document.getElementById("file-backgrounds").nextElementSibling.innerHTML = config.backgrounds;
+    return;
+  }
 }
 
 updateDevices();
+getConfig();
