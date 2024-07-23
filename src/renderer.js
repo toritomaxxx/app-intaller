@@ -60,21 +60,20 @@ async function updateConfig(key, inputElement) {
 
 async function saveConfig() {
   await window.versions.config(config);
+  window.location.href = 'index.html';
+
 }
 
 async function getConfig() {
   config = await window.versions.getConfig();
   if (config.apk !== undefined) {
     document.getElementById("file-apk").nextElementSibling.innerHTML = config.apk;
-    return;
   }
   if (config.docs !== undefined) {
     document.getElementById("file-docs").nextElementSibling.innerHTML = config.docs;
-    return;
   }
   if (config.backgrounds !== undefined) {
     document.getElementById("file-backgrounds").nextElementSibling.innerHTML = config.backgrounds;
-    return;
   }
 }
 
