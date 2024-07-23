@@ -67,10 +67,37 @@ const getConfigJson = () => {
 
 }
 
+const sendOrder = (order) => {
+  const apk = JSON.parse(fs.readFileSync("./src/config/config.json")).apk;
+  const docs = JSON.parse(fs.readFileSync("./src/config/config.json")).docs;
+  const backgrounds = JSON.parse(fs.readFileSync("./src/config/config.json")).backgrounds;
+  const apkFiles = fs.readdirSync(apk);
+  const docsFiles = fs.readdirSync(docs);
+  const backgroundsFiles = fs.readdirSync(backgrounds);
+
+  
+  function openFolder(order){
+
+    if (order === "apk") {
+      for (let i=0; i<apkFiles.length; i++){
+        execSync(`${ADB}`+" "+"install"+" "+`"${apk}/${apkFiles[i]}"`);  
+      }
+    } else if (order === "docs") {
+      console.log(docsFiles);
+    } else if (order === "backgrounds") {
+       console.log(backgroundsFiles);
+    }
+  }
+  openFolder(order);
+
+
+}
+
 
 module.exports = {
   browserDevice,
   system,
   saveConfigJson,
-  getConfigJson
+  getConfigJson,
+  sendOrder
 };

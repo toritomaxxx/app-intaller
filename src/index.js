@@ -1,6 +1,6 @@
 const { app, BrowserWindow ,ipcMain} = require("electron");
 const path = require("node:path");
-const {browserDevice,system,saveConfigJson,getConfigJson} = require("./ipcFuntions");
+const {browserDevice,system,saveConfigJson,getConfigJson,sendOrder} = require("./ipcFuntions");
 
 
 
@@ -53,6 +53,10 @@ app.whenReady().then(() => {
     console.log ();
     return getConfigJson()
     });
+    ipcMain.handle("send-order", (event , order) => {
+      return sendOrder(order)
+     }
+    );
 
 
   createWindow();
