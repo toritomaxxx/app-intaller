@@ -78,7 +78,8 @@ async function getConfig() {
 }
 
 async function sendOrder(id) {
-  await window.versions.sendOrder(id, device);
+  let message = await window.versions.sendOrder(id, device);
+  
 }
 
 updateDevices();

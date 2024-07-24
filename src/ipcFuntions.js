@@ -67,28 +67,76 @@ const getConfigJson = () => {
   return JSON.parse(fs.readFileSync("./src/config/config.json"));
 };
 
+function sendMessage(message,mainWindow) {
+  mainWindow.webContents.send("message", message);
+}
+
 function installApps(pathConfig, path) {
   for (let i = 0; i < path.length; i++) {
-    execSync(`${ADB}` + " " + "install" + " " + `"${pathConfig}/${path[i]}"`);
+    try {
+      execSync(`${ADB}` + " " + "install" + " " + `"${pathConfig}/${path[i]}"`);
+      sendMessage(`Se instalo la aplicacion ${path[i]}`);
+    } catch (error) {
+      sendMessage(`Error al instalar la aplicacion ${path[i]}`);
+    }
   }
 }
-function sendDocs(pathConfig, path) {}
-function sendBackgrounds(pathConfig, path) {}
 
-const sendOrder = (order) => {
+function sendDocs(pathConfig, path) {
+  const Dir = "/storage/emulated/0/documents";
+  try {
+    execSync(`${ADB} shell mkdir -p ${Dir}`);
+    sendMessage("Se creo el directorio",mainWindow);
+  } catch (error) {
+    sendMessage("Error al crear el directorio",mainWindow);
+  }
+  for (let i = 0; i < path.length; i++) {
+    try {
+      execSync(`${ADB} push "${pathConfig}/${path[i]}" ${Dir}`);
+      sendMessage(`Se envio el archivo ${path[i]}`,mainWindow);
+    } catch (error) {
+      sendMessage(`Error al enviar el archivo ${path[i]}`,mainWindow);
+    }
+  }
+}
+function sendBackgrounds(pathConfig, path) {
+  const Dir = "/storage/emulated/0/Pictures";
+  try {
+    execSync(`${ADB} shell mkdir -p ${Dir}`);
+    sendMessage("Se creo el directorio",mainWindow);
+  } catch (error) {
+    sendMessage("Error al crear el directorio",mainWindow);
+  }
+  for (let i = 0; i < path.length; i++) {
+    try {
+      execSync(`${ADB} push "${pathConfig}/${path[i]}" ${Dir}`);
+      sendMessage(`Se envio el archivo ${path[i]}`,mainWindow);
+    } catch (error) {
+      sendMessage(`Error al enviar el archivo ${path[i]}`,mainWindow);
+    }
+  }
+}
+
+const sendOrder = (order,mainWindow) => {
   const apk = JSON.parse(fs.readFileSync("./src/config/config.json")).apk;
   const docs = JSON.parse(fs.readFileSync("./src/config/config.json")).docs;
-  const backgrounds = JSON.parse(fs.readFileSync("./src/config/config.json")).backgrounds;
+  const backgrounds = JSON.parse(
+    fs.readFileSync("./src/config/config.json")
+  ).backgrounds;
   const apkFiles = fs.readdirSync(apk);
   const docsFiles = fs.readdirSync(docs);
   const backgroundsFiles = fs.readdirSync(backgrounds);
 
   if (order === "apk") {
-    installApps(apk, apkFiles);
+    return installApps(apk, apkFiles,mainWindow);
   } else if (order === "docs") {
-    sendDocs(docs, docsFiles);
+    sendDocs(docs, docsFiles,mainWindow);
   } else if (order === "backgrounds") {
-    sendBackgrounds(backgrounds, backgroundsFiles);
+    sendBackgrounds(backgrounds, backgroundsFiles,mainWindow);
+  } else if (order === "all") {
+    installApps(apk, apkFiles);
+    sendDocs(docs, docsFiles);
+    sendBackgrounds(backgrounds, backgroundsFiles,mainWindow);
   }
 };
 

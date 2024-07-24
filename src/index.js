@@ -12,10 +12,9 @@ if(process.env.NODE_ENV !== "production"){
 }
 
 
-
+let mainWindow;
 const createWindow = () => {
-
-  const mainWindow = new BrowserWindow({
+   mainWindow = new BrowserWindow({
     width: 600,
     height: 380,
     autoHideMenuBar: true,
@@ -29,22 +28,17 @@ const createWindow = () => {
     },
     resizable: false,
   });
-
-
   mainWindow.loadFile(path.join(__dirname, "index.html"));
   mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {
-
   ipcMain.handle("browser-device", () => {
    return browserDevice()
   });
-
   ipcMain.handle("system", () => {
     return system()
    });
-
    ipcMain.handle("save-config", (event , config) => {
     console.log(config);
     return saveConfigJson(config)
@@ -54,7 +48,8 @@ app.whenReady().then(() => {
     return getConfigJson()
     });
     ipcMain.handle("send-order", (event , order) => {
-      return sendOrder(order)
+      // mainWindow.webContents.send("send-order", order);
+      return sendOrder(order,mainWindow)
      }
     );
 
