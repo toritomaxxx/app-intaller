@@ -7,7 +7,6 @@ const adbLinux = "./src/ADB/Linux/adb";
 let deviceList = [];
 let ADB = "";
 
-
 const browserDevice = () => {
   deviceList = [];
   if (os.platform() === "win32") {
@@ -53,19 +52,28 @@ const system = () => {
   if (os.platform() === "win32") {
     return true;
   }
-  return false
+  return false;
 };
 
 const saveConfigJson = (config) => {
-  fs.writeFileSync("./src/config/config.json", JSON.stringify(config)).then(() => {
-    console.log("config saved");
-  });
-}
+  fs.writeFileSync("./src/config/config.json", JSON.stringify(config)).then(
+    () => {
+      console.log("config saved");
+    }
+  );
+};
 
 const getConfigJson = () => {
   return JSON.parse(fs.readFileSync("./src/config/config.json"));
+};
 
+function installApps(pathConfig, path) {
+  for (let i = 0; i < path.length; i++) {
+    execSync(`${ADB}` + " " + "install" + " " + `"${pathConfig}/${path[i]}"`);
+  }
 }
+function sendDocs(pathConfig, path) {}
+function sendBackgrounds(pathConfig, path) {}
 
 const sendOrder = (order) => {
   const apk = JSON.parse(fs.readFileSync("./src/config/config.json")).apk;
@@ -75,29 +83,19 @@ const sendOrder = (order) => {
   const docsFiles = fs.readdirSync(docs);
   const backgroundsFiles = fs.readdirSync(backgrounds);
 
-  
-  function openFolder(order){
-
-    if (order === "apk") {
-      for (let i=0; i<apkFiles.length; i++){
-        execSync(`${ADB}`+" "+"install"+" "+`"${apk}/${apkFiles[i]}"`);  
-      }
-    } else if (order === "docs") {
-      console.log(docsFiles);
-    } else if (order === "backgrounds") {
-       console.log(backgroundsFiles);
-    }
+  if (order === "apk") {
+    installApps(apk, apkFiles);
+  } else if (order === "docs") {
+    sendDocs(docs, docsFiles);
+  } else if (order === "backgrounds") {
+    sendBackgrounds(backgrounds, backgroundsFiles);
   }
-  openFolder(order);
-
-
-}
-
+};
 
 module.exports = {
   browserDevice,
   system,
   saveConfigJson,
   getConfigJson,
-  sendOrder
+  sendOrder,
 };
