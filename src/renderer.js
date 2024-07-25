@@ -60,8 +60,7 @@ async function updateConfig(key, inputElement) {
 
 async function saveConfig() {
   await window.versions.config(config);
-  window.location.href = 'index.html';
-
+  
 }
 
 async function getConfig() {
@@ -78,9 +77,20 @@ async function getConfig() {
 }
 
 async function sendOrder(id) {
-  let message = await window.versions.sendOrder(id, device);
-  
+  try {
+    let message = await window.versions.sendOrder(id, device);
+  } catch (error) {
+    console.error("Error al enviar la orden:", error);
+  }
+}
+
+async function actualizarMensaje() {
+  await window.versions.onUpdate((message) => {
+    document.getElementById("message").style.display = "block";
+    document.getElementById("message").innerHTML = message;
+  });
 }
 
 updateDevices();
 getConfig();
+actualizarMensaje();

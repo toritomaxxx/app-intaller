@@ -16,7 +16,7 @@ let mainWindow;
 const createWindow = () => {
    mainWindow = new BrowserWindow({
     width: 600,
-    height: 380,
+    height: 400,
     autoHideMenuBar: true,
     frame: true,
     webPreferences: {
@@ -40,15 +40,12 @@ app.whenReady().then(() => {
     return system()
    });
    ipcMain.handle("save-config", (event , config) => {
-    console.log(config);
-    return saveConfigJson(config)
+    return saveConfigJson(config,mainWindow)
    });
    ipcMain.handle("get-config", () => {
-    console.log ();
     return getConfigJson()
     });
     ipcMain.handle("send-order", (event , order) => {
-      // mainWindow.webContents.send("send-order", order);
       return sendOrder(order,mainWindow)
      }
     );

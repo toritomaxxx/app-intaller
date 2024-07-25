@@ -54,35 +54,38 @@ const system = () => {
   }
   return false;
 };
+function sendMessage(message,mainWindow) {
+  mainWindow.webContents.send("message", message);
+}
 
-const saveConfigJson = (config) => {
-  fs.writeFileSync("./src/config/config.json", JSON.stringify(config)).then(
-    () => {
-      console.log("config saved");
-    }
-  );
-};
+
+function saveConfigJson(config,mainWindow) {
+  try {
+    fs.writeFileSync("./src/config/config.json", JSON.stringify(config));
+    sendMessage("Se guardo la configuracion",mainWindow);
+  } catch (error) {
+    sendMessage("Error al guardar la configuracion",mainWindow);
+  }
+}
+
 
 const getConfigJson = () => {
   return JSON.parse(fs.readFileSync("./src/config/config.json"));
 };
 
-function sendMessage(message,mainWindow) {
-  mainWindow.webContents.send("message", message);
-}
 
-function installApps(pathConfig, path) {
+function installApps(pathConfig, path,mainWindow) {
   for (let i = 0; i < path.length; i++) {
     try {
       execSync(`${ADB}` + " " + "install" + " " + `"${pathConfig}/${path[i]}"`);
-      sendMessage(`Se instalo la aplicacion ${path[i]}`);
+      sendMessage(`Se instalo la aplicacion ${path[i]}`,mainWindow);
     } catch (error) {
-      sendMessage(`Error al instalar la aplicacion ${path[i]}`);
+      sendMessage(`Error al instalar la aplicacion ${path[i]}`,mainWindow);
     }
   }
 }
 
-function sendDocs(pathConfig, path) {
+function sendDocs(pathConfig, path,mainWindow) {
   const Dir = "/storage/emulated/0/documents";
   try {
     execSync(`${ADB} shell mkdir -p ${Dir}`);
@@ -99,7 +102,7 @@ function sendDocs(pathConfig, path) {
     }
   }
 }
-function sendBackgrounds(pathConfig, path) {
+function sendBackgrounds(pathConfig, path,mainWindow) {
   const Dir = "/storage/emulated/0/Pictures";
   try {
     execSync(`${ADB} shell mkdir -p ${Dir}`);
