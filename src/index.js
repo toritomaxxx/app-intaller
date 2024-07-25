@@ -1,6 +1,6 @@
 const { app, BrowserWindow ,ipcMain} = require("electron");
 const path = require("node:path");
-const {browserDevice,system,saveConfigJson,getConfigJson,sendOrder} = require("./ipcFuntions");
+const {browserDevice,system,saveConfigJson,getConfigJson,sendOrder,configFunction} = require("./ipcFuntions");
 
 
 
@@ -38,6 +38,9 @@ app.whenReady().then(() => {
   });
   ipcMain.handle("system", () => {
     return system()
+   });
+   ipcMain.handle("configFunction", () => {
+    return configFunction()
    });
    ipcMain.handle("save-config", (event , config) => {
     return saveConfigJson(config,mainWindow)

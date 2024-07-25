@@ -59,7 +59,7 @@ async function updateConfig(key, inputElement) {
 }
 
 async function saveConfig() {
-  await window.versions.config(config);
+   await window.versions.config(config);
   
 }
 

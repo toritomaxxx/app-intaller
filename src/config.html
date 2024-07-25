@@ -28,10 +28,14 @@
           onchange="updateConfig('apk', this)"
           webkitdirectory
           directory
-          style="display: none;"
+          style="display: none"
         />
         <label for="file-apk" class="button-file">
-          <img src="./assets/icons/upload-file.svg" alt="folder" class="file-icon" />
+          <img
+            src="./assets/icons/upload-file.svg"
+            alt="folder"
+            class="file-icon"
+          />
           <h4>Selecciona la carpeta que contiene los APK</h4>
         </label>
         <input
@@ -40,10 +44,14 @@
           onchange="updateConfig('docs', this)"
           webkitdirectory
           directory
-          style="display: none;"
+          style="display: none"
         />
         <label for="file-docs" class="button-file">
-          <img src="./assets/icons/upload-file.svg" alt="folder" class="file-icon" />
+          <img
+            src="./assets/icons/upload-file.svg"
+            alt="folder"
+            class="file-icon"
+          />
           <h4>Selecciona la carpeta que contiene los documentos</h4>
         </label>
         <input
@@ -52,25 +60,24 @@
           onchange="updateConfig('backgrounds', this)"
           webkitdirectory
           directory
-          style="display: none;"
+          style="display: none"
         />
         <label for="file-backgrounds" class="button-file">
-          <img src="./assets/icons/upload-file.svg" alt="folder" class="file-icon" />
+          <img
+            src="./assets/icons/upload-file.svg"
+            alt="folder"
+            class="file-icon"
+          />
           <h4>Selecciona la carpeta que contiene los fondos</h4>
         </label>
       </div>
-      <a id="save-config-reply" class="btn6" onclick="{
-        saveConfig()
-
-        }">Guardar</a>
+      <a
+        id="save-config-reply"
+        class="btn6"
+        onclick="saveConfig()"
+        >Guardar</a> 
     </div>
-    <div
-      class="message"
-      id="message"
-      style="display: none;"
-    >
-      
-    </div>
+    <div class="message" id="message" style="display: none"></div>
     <script src="./renderer.js"></script>
   </body>
-  </html>
+</html>

@@ -2,10 +2,22 @@ const { app, shell, BrowserWindow, ipcMain } = require("electron");
 const { execSync } = require("child_process");
 const os = require("os");
 const fs = require("fs");
+const path = require("path");
 const adbWindows = "./src/ADB/Windows/adb.exe";
 const adbLinux = "./src/ADB/Linux/adb";
 let deviceList = [];
 let ADB = "";
+let pathJsonConfig = "";
+
+function configFunction() {
+  if (os.platform() === "win32") {
+    pathJsonConfig = path.join(homeDir,"AppData","Roaming","app-installer","config");
+  } else {
+    pathJsonConfig = path.join(homeDir, ".config", "app-installer");
+  }
+  console.log(pathJsonConfig);
+  fs.mkdirSync(pathJsonConfig, { recursive: true });
+}
 
 const browserDevice = () => {
   deviceList = [];
@@ -48,79 +60,81 @@ const browserDevice = () => {
   return deviceList;
 };
 
+homeDir = process.env.HOME;
+
 const system = () => {
   if (os.platform() === "win32") {
     return true;
+  } else {
+    return false;
   }
-  return false;
 };
-function sendMessage(message,mainWindow) {
+function sendMessage(message, mainWindow) {
   mainWindow.webContents.send("message", message);
 }
 
-
-function saveConfigJson(config,mainWindow) {
+function saveConfigJson(config, mainWindow) {
   try {
-    fs.writeFileSync("./src/config/config.json", JSON.stringify(config));
-    sendMessage("Se guardo la configuracion",mainWindow);
+    console.log(pathJsonConfig);
+    fs.writeFileSync(pathJsonConfig, JSON.stringify(config));
+    sendMessage("Se guardo la configuracion", mainWindow);
   } catch (error) {
-    sendMessage("Error al guardar la configuracion",mainWindow);
+    sendMessage("Error al guardar la configuracion", mainWindow);
   }
 }
 
-
 const getConfigJson = () => {
-  return JSON.parse(fs.readFileSync("./src/config/config.json"));
+  console.log(pathJsonConfig);
+  return JSON.parse(fs.readFileSync(pathJsonConfig));
 };
 
-
-function installApps(pathConfig, path,mainWindow) {
+function installApps(pathConfig, path, mainWindow) {
   for (let i = 0; i < path.length; i++) {
     try {
       execSync(`${ADB}` + " " + "install" + " " + `"${pathConfig}/${path[i]}"`);
-      sendMessage(`Se instalo la aplicacion ${path[i]}`,mainWindow);
+      sendMessage(`Se instalo la aplicacion ${path[i]}`, mainWindow);
     } catch (error) {
-      sendMessage(`Error al instalar la aplicacion ${path[i]}`,mainWindow);
+      sendMessage(`Error al instalar la aplicacion ${path[i]}`, mainWindow);
     }
   }
 }
 
-function sendDocs(pathConfig, path,mainWindow) {
+function sendDocs(pathConfig, path, mainWindow) {
   const Dir = "/storage/emulated/0/documents";
   try {
     execSync(`${ADB} shell mkdir -p ${Dir}`);
-    sendMessage("Se creo el directorio",mainWindow);
+    sendMessage("Se creo el directorio", mainWindow);
   } catch (error) {
-    sendMessage("Error al crear el directorio",mainWindow);
+    sendMessage("Error al crear el directorio", mainWindow);
   }
   for (let i = 0; i < path.length; i++) {
     try {
       execSync(`${ADB} push "${pathConfig}/${path[i]}" ${Dir}`);
-      sendMessage(`Se envio el archivo ${path[i]}`,mainWindow);
+      sendMessage(`Se envio el archivo ${path[i]}`, mainWindow);
     } catch (error) {
-      sendMessage(`Error al enviar el archivo ${path[i]}`,mainWindow);
+      sendMessage(`Error al enviar el archivo ${path[i]}`, mainWindow);
     }
   }
 }
-function sendBackgrounds(pathConfig, path,mainWindow) {
+function sendBackgrounds(pathConfig, path, mainWindow) {
   const Dir = "/storage/emulated/0/Pictures";
   try {
     execSync(`${ADB} shell mkdir -p ${Dir}`);
-    sendMessage("Se creo el directorio",mainWindow);
+    sendMessage("Se creo el directorio", mainWindow);
   } catch (error) {
-    sendMessage("Error al crear el directorio",mainWindow);
+    sendMessage("Error al crear el directorio", mainWindow);
   }
   for (let i = 0; i < path.length; i++) {
     try {
       execSync(`${ADB} push "${pathConfig}/${path[i]}" ${Dir}`);
-      sendMessage(`Se envio el archivo ${path[i]}`,mainWindow);
+      sendMessage(`Se envio el archivo ${path[i]}`, mainWindow);
     } catch (error) {
-      sendMessage(`Error al enviar el archivo ${path[i]}`,mainWindow);
+      sendMessage(`Error al enviar el archivo ${path[i]}`, mainWindow);
     }
   }
 }
 
-const sendOrder = (order,mainWindow) => {
+const sendOrder = (order, mainWindow) => {
   const apk = JSON.parse(fs.readFileSync("./src/config/config.json")).apk;
   const docs = JSON.parse(fs.readFileSync("./src/config/config.json")).docs;
   const backgrounds = JSON.parse(
@@ -131,15 +145,15 @@ const sendOrder = (order,mainWindow) => {
   const backgroundsFiles = fs.readdirSync(backgrounds);
 
   if (order === "apk") {
-    return installApps(apk, apkFiles,mainWindow);
+    return installApps(apk, apkFiles, mainWindow);
   } else if (order === "docs") {
-    sendDocs(docs, docsFiles,mainWindow);
+    sendDocs(docs, docsFiles, mainWindow);
   } else if (order === "backgrounds") {
-    sendBackgrounds(backgrounds, backgroundsFiles,mainWindow);
+    sendBackgrounds(backgrounds, backgroundsFiles, mainWindow);
   } else if (order === "all") {
     installApps(apk, apkFiles);
     sendDocs(docs, docsFiles);
-    sendBackgrounds(backgrounds, backgroundsFiles,mainWindow);
+    sendBackgrounds(backgrounds, backgroundsFiles, mainWindow);
   }
 };
 
@@ -149,4 +163,5 @@ module.exports = {
   saveConfigJson,
   getConfigJson,
   sendOrder,
+  configFunction,
 };
