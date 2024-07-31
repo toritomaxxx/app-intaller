@@ -1,13 +1,16 @@
 let device = [];
 var config = {};
+let deviceList = [];
 
 const func = async () => {
   const response = await window.versions.device();
+  deviceList = response;
   return response;
 };
 
 const updateDevices = async () => {
   const devices = await func();
+  updateSelectDevice();
   toggleDevices(devices);
 };
 
@@ -28,19 +31,6 @@ function toggleDevices(devices) {
     } else if (devices.length !== 1) {
       document.getElementById("anyDevice").style.display = "none";
       document.getElementById("moreDevice").style.display = "block";
-      let deviceList = document.getElementById("deviceList");
-      deviceList.innerHTML = "";
-      devices.forEach((device) => {
-        let li = document.createElement("li");
-        li.innerHTML = device.model;
-        li.setAttribute("id", device.id);
-        li.onclick = function () {
-          device = device;
-          document.getElementById("deviceName").innerHTML = device.model;
-          document.getElementById("deviceID").innerHTML = device.id;
-        };
-        deviceList.appendChild(li);
-      });
     }
   }
 }
@@ -78,7 +68,7 @@ async function getConfig() {
 
 async function sendOrder(id) {
   try {
-    let message = await window.versions.sendOrder(id, device);
+    await window.versions.sendOrder(id, device);
   } catch (error) {
     console.error("Error al enviar la orden:", error);
   }
@@ -88,6 +78,21 @@ async function actualizarMensaje() {
   await window.versions.onUpdate((message) => {
     document.getElementById("message").style.display = "block";
     document.getElementById("message").innerHTML = message;
+  });
+}
+
+
+function updateSelectDevice(){
+  document.getElementById("deviceList").innerHTML = "";
+  deviceList.forEach((device) => {
+    let option = document.createElement("option");
+    option.innerHTML = device.model;
+    option.setAttribute("value", device.id);
+    
+
+    document.getElementById("deviceList").appendChild(option);
+
+
   });
 }
 

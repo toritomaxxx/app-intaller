@@ -8,15 +8,21 @@ const adbLinux = "./src/ADB/Linux/adb";
 let deviceList = [];
 let ADB = "";
 let pathJsonConfig = "";
+let pathJsonConfigComplete = "";
 
 function configFunction() {
+  const homeDir = process.env.HOME;
   if (os.platform() === "win32") {
     pathJsonConfig = path.join(homeDir,"AppData","Roaming","app-installer","config");
+
   } else {
     pathJsonConfig = path.join(homeDir, ".config", "app-installer");
   }
-  console.log(pathJsonConfig);
   fs.mkdirSync(pathJsonConfig, { recursive: true });
+  pathJsonConfigComplete = path.join(pathJsonConfig, "config.json");
+  if (!fs.existsSync(pathJsonConfigComplete)) {
+    fs.writeFileSync(pathJsonConfigComplete, JSON.stringify({}));
+  }
 }
 
 const browserDevice = () => {
@@ -60,7 +66,6 @@ const browserDevice = () => {
   return deviceList;
 };
 
-homeDir = process.env.HOME;
 
 const system = () => {
   if (os.platform() === "win32") {
@@ -75,8 +80,7 @@ function sendMessage(message, mainWindow) {
 
 function saveConfigJson(config, mainWindow) {
   try {
-    console.log(pathJsonConfig);
-    fs.writeFileSync(pathJsonConfig, JSON.stringify(config));
+    fs.writeFileSync(pathJsonConfigComplete, JSON.stringify(config));
     sendMessage("Se guardo la configuracion", mainWindow);
   } catch (error) {
     sendMessage("Error al guardar la configuracion", mainWindow);
@@ -84,8 +88,7 @@ function saveConfigJson(config, mainWindow) {
 }
 
 const getConfigJson = () => {
-  console.log(pathJsonConfig);
-  return JSON.parse(fs.readFileSync(pathJsonConfig));
+  return JSON.parse(fs.readFileSync(pathJsonConfigComplete));
 };
 
 function installApps(pathConfig, path, mainWindow) {
@@ -118,6 +121,7 @@ function sendDocs(pathConfig, path, mainWindow) {
 }
 function sendBackgrounds(pathConfig, path, mainWindow) {
   const Dir = "/storage/emulated/0/Pictures";
+  console.log()
   try {
     execSync(`${ADB} shell mkdir -p ${Dir}`);
     sendMessage("Se creo el directorio", mainWindow);
@@ -135,15 +139,12 @@ function sendBackgrounds(pathConfig, path, mainWindow) {
 }
 
 const sendOrder = (order, mainWindow) => {
-  const apk = JSON.parse(fs.readFileSync("./src/config/config.json")).apk;
-  const docs = JSON.parse(fs.readFileSync("./src/config/config.json")).docs;
-  const backgrounds = JSON.parse(
-    fs.readFileSync("./src/config/config.json")
-  ).backgrounds;
+  const apk = JSON.parse(fs.readFileSync(pathJsonConfigComplete)).apk;
+  const docs = JSON.parse(fs.readFileSync(pathJsonConfigComplete)).docs;
+  const backgrounds = JSON.parse(fs.readFileSync(pathJsonConfigComplete)).backgrounds;
   const apkFiles = fs.readdirSync(apk);
   const docsFiles = fs.readdirSync(docs);
   const backgroundsFiles = fs.readdirSync(backgrounds);
-
   if (order === "apk") {
     return installApps(apk, apkFiles, mainWindow);
   } else if (order === "docs") {
@@ -156,6 +157,8 @@ const sendOrder = (order, mainWindow) => {
     sendBackgrounds(backgrounds, backgroundsFiles, mainWindow);
   }
 };
+
+configFunction();
 
 module.exports = {
   browserDevice,
