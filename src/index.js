@@ -1,6 +1,6 @@
 const { app, BrowserWindow ,ipcMain} = require("electron");
 const path = require("node:path");
-const {browserDevice,system,saveConfigJson,getConfigJson,sendOrder,configFunction} = require("./ipcFuntions");
+const {browserDevice,system,saveConfigJson,getConfigJson,sendOrder,configFunction,changeDevice} = require("./ipcFuntions");
 
 
 
@@ -50,6 +50,10 @@ app.whenReady().then(() => {
     });
     ipcMain.handle("send-order", (event , order) => {
       return sendOrder(order,mainWindow)
+     }
+    );
+    ipcMain.handle("change-device", (event , device) => {
+      return changeDevice(device)
      }
     );
 

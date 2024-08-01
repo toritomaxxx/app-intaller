@@ -88,14 +88,20 @@ function updateSelectDevice(){
     let option = document.createElement("option");
     option.innerHTML = device.model;
     option.setAttribute("value", device.id);
-    
-
     document.getElementById("deviceList").appendChild(option);
-
-
   });
 }
 
-updateDevices();
+async function selectDevice(device) {
+  await window.versions.changeDevice(device);
+  
+}
+
+
+
+updateDevices().then(()=>{
+  if(deviceList.length == 0) return 
+  selectDevice(deviceList[0].id);
+})
 getConfig();
 actualizarMensaje();

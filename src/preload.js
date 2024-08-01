@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('versions', {
   getConfig: () => ipcRenderer.invoke('get-config'),
   sendOrder: (order) => ipcRenderer.invoke('send-order', order),
   onUpdate: (callback) => ipcRenderer.on('message', (_event, value) => callback(value)),
-  configFunction: () => ipcRenderer.invoke('configFunction')
+  configFunction: () => ipcRenderer.invoke('configFunction'),
+  changeDevice: (device) => ipcRenderer.invoke('change-device', device)
 });
 

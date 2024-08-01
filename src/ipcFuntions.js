@@ -9,6 +9,7 @@ let deviceList = [];
 let ADB = "";
 let pathJsonConfig = "";
 let pathJsonConfigComplete = "";
+let movil = "";
 
 function configFunction() {
   const homeDir = process.env.HOME;
@@ -94,7 +95,7 @@ const getConfigJson = () => {
 function installApps(pathConfig, path, mainWindow) {
   for (let i = 0; i < path.length; i++) {
     try {
-      execSync(`${ADB}` + " " + "install" + " " + `"${pathConfig}/${path[i]}"`);
+      execSync(`${ADB} -s ${movil} install ${pathConfig}/${path[i]}`);
       sendMessage(`Se instalo la aplicacion ${path[i]}`, mainWindow);
     } catch (error) {
       sendMessage(`Error al instalar la aplicacion ${path[i]}`, mainWindow);
@@ -105,14 +106,14 @@ function installApps(pathConfig, path, mainWindow) {
 function sendDocs(pathConfig, path, mainWindow) {
   const Dir = "/storage/emulated/0/documents";
   try {
-    execSync(`${ADB} shell mkdir -p ${Dir}`);
+    execSync(`${ADB} -s ${movil} shell mkdir -p ${Dir}`);
     sendMessage("Se creo el directorio", mainWindow);
   } catch (error) {
     sendMessage("Error al crear el directorio", mainWindow);
   }
   for (let i = 0; i < path.length; i++) {
     try {
-      execSync(`${ADB} push "${pathConfig}/${path[i]}" ${Dir}`);
+      execSync(`${ADB} -s ${movil}  push "${pathConfig}/${path[i]}" ${Dir}`);
       sendMessage(`Se envio el archivo ${path[i]}`, mainWindow);
     } catch (error) {
       sendMessage(`Error al enviar el archivo ${path[i]}`, mainWindow);
@@ -123,14 +124,16 @@ function sendBackgrounds(pathConfig, path, mainWindow) {
   const Dir = "/storage/emulated/0/Pictures";
   console.log()
   try {
-    execSync(`${ADB} shell mkdir -p ${Dir}`);
+    console.log(`${ADB} -s ${movil} shell mkdir -p ${Dir}`);
+    execSync(`${ADB} -s ${movil} shell mkdir -p ${Dir}`);
     sendMessage("Se creo el directorio", mainWindow);
   } catch (error) {
     sendMessage("Error al crear el directorio", mainWindow);
   }
   for (let i = 0; i < path.length; i++) {
     try {
-      execSync(`${ADB} push "${pathConfig}/${path[i]}" ${Dir}`);
+      execSync(`${ADB}  push "${pathConfig}/${path[i]}" ${Dir}`);
+      console.log(path[i])
       sendMessage(`Se envio el archivo ${path[i]}`, mainWindow);
     } catch (error) {
       sendMessage(`Error al enviar el archivo ${path[i]}`, mainWindow);
@@ -158,7 +161,12 @@ const sendOrder = (order, mainWindow) => {
   }
 };
 
+const changeDevice = (device) => {
+  movil = device;
+};
+
 configFunction();
+
 
 module.exports = {
   browserDevice,
@@ -167,4 +175,5 @@ module.exports = {
   getConfigJson,
   sendOrder,
   configFunction,
+  changeDevice,
 };
