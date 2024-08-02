@@ -99,9 +99,13 @@ async function selectDevice(device) {
 
 
 
+
+
 updateDevices().then(()=>{
   if(deviceList.length == 0) return 
   selectDevice(deviceList[0].id);
 })
+
+setInterval(updateDevices, 5000);
 getConfig();
 actualizarMensaje();

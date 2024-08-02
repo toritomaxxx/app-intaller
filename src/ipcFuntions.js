@@ -3,6 +3,7 @@ const { execSync } = require("child_process");
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
+const { brotliCompress } = require("zlib");
 const adbWindows = "./src/ADB/Windows/adb.exe";
 const adbLinux = "./src/ADB/Linux/adb";
 let deviceList = [];
