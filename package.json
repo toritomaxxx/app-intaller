@@ -1,8 +1,8 @@
 {
-  "name": "app-intaller",
-  "productName": "app-intaller",
+  "name": "app-installer",
+  "productName": "app-installer",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Esta es una aplicacion de escritorio que permite una facil configuracion de tu dispositico android con una comoda interfaz grafica",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -29,7 +29,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-reload": "^2.0.0-alpha.1",
+    "electron-builder": "^24.13.3",
     "electron-squirrel-startup": "^1.0.1"
   }
 }

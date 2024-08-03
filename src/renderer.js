@@ -81,7 +81,6 @@ async function actualizarMensaje() {
   });
 }
 
-
 function updateSelectDevice(){
   document.getElementById("deviceList").innerHTML = "";
   deviceList.forEach((device) => {
@@ -94,12 +93,7 @@ function updateSelectDevice(){
 
 async function selectDevice(device) {
   await window.versions.changeDevice(device);
-  
 }
-
-
-
-
 
 updateDevices().then(()=>{
   if(deviceList.length == 0) return 

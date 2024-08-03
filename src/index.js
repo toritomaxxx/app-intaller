@@ -1,20 +1,19 @@
-const { app, BrowserWindow ,ipcMain} = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
-const {browserDevice,system,saveConfigJson,getConfigJson,sendOrder,configFunction,changeDevice} = require("./ipcFuntions");
-
-
-
-if(process.env.NODE_ENV !== "production"){
-  require("electron-reload")(__dirname, {
-    electron: path.join(__dirname, "../node_modules", ".bin", "electron"),
-    hardResetMethod: "exit",
-  });
-}
-
+const {
+  browserDevice,
+  system,
+  saveConfigJson,
+  getConfigJson,
+  sendOrder,
+  configFunction,
+  changeDevice,
+} = require("./ipcFuntions");
 
 let mainWindow;
+
 const createWindow = () => {
-   mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 600,
     height: 400,
     autoHideMenuBar: true,
@@ -24,42 +23,46 @@ const createWindow = () => {
       nodeIntegration: true,
       contextIsolation: true,
       enableRemoteModule: true,
-      devTools: true,
+      devTools: false,
     },
     resizable: false,
   });
+
   mainWindow.loadFile(path.join(__dirname, "index.html"));
-  mainWindow.webContents.openDevTools();
+
 };
 
 app.whenReady().then(() => {
   ipcMain.handle("browser-device", () => {
-   return browserDevice()
+    return browserDevice();
   });
-  ipcMain.handle("system", () => {
-    return system()
-   });
-   ipcMain.handle("configFunction", () => {
-    return configFunction()
-   });
-   ipcMain.handle("save-config", (event , config) => {
-    return saveConfigJson(config,mainWindow)
-   });
-   ipcMain.handle("get-config", () => {
-    return getConfigJson()
-    });
-    ipcMain.handle("send-order", (event , order) => {
-      return sendOrder(order,mainWindow)
-     }
-    );
-    ipcMain.handle("change-device", (event , device) => {
-      return changeDevice(device)
-     }
-    );
 
+  ipcMain.handle("system", () => {
+    return system();
+  });
+
+  ipcMain.handle("configFunction", () => {
+    return configFunction();
+  });
+
+  ipcMain.handle("save-config", (event, config) => {
+    return saveConfigJson(config, mainWindow);
+  });
+
+  ipcMain.handle("get-config", () => {
+    return getConfigJson();
+  });
+
+  ipcMain.handle("send-order", (event, order) => {
+    return sendOrder(order, mainWindow);
+  });
+
+  ipcMain.handle("change-device", (event, device) => {
+    return changeDevice(device);
+  });
 
   createWindow();
-  
+
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();

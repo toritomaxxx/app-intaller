@@ -14,7 +14,7 @@
     "titlebar": {
         "Enable": true,
         "EnableIcon": true,
-        "icon": "./assets/icon.ico",
+        "icon": "./assets/icons/icon.ico",
         "title": "Programador de celulares",
         "height": 30
     }

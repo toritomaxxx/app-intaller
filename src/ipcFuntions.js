@@ -1,9 +1,7 @@
-const { app, shell, BrowserWindow, ipcMain } = require("electron");
 const { execSync } = require("child_process");
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
-const { brotliCompress } = require("zlib");
 const adbWindows = "./src/ADB/Windows/adb.exe";
 const adbLinux = "./src/ADB/Linux/adb";
 let deviceList = [];
@@ -15,8 +13,13 @@ let movil = "";
 function configFunction() {
   const homeDir = process.env.HOME;
   if (os.platform() === "win32") {
-    pathJsonConfig = path.join(homeDir,"AppData","Roaming","app-installer","config");
-
+    pathJsonConfig = path.join(
+      homeDir,
+      "AppData",
+      "Roaming",
+      "app-installer",
+      "config"
+    );
   } else {
     pathJsonConfig = path.join(homeDir, ".config", "app-installer");
   }
@@ -67,7 +70,6 @@ const browserDevice = () => {
   }
   return deviceList;
 };
-
 
 const system = () => {
   if (os.platform() === "win32") {
@@ -123,9 +125,7 @@ function sendDocs(pathConfig, path, mainWindow) {
 }
 function sendBackgrounds(pathConfig, path, mainWindow) {
   const Dir = "/storage/emulated/0/Pictures";
-  console.log()
   try {
-    console.log(`${ADB} -s ${movil} shell mkdir -p ${Dir}`);
     execSync(`${ADB} -s ${movil} shell mkdir -p ${Dir}`);
     sendMessage("Se creo el directorio", mainWindow);
   } catch (error) {
@@ -134,7 +134,6 @@ function sendBackgrounds(pathConfig, path, mainWindow) {
   for (let i = 0; i < path.length; i++) {
     try {
       execSync(`${ADB}  push "${pathConfig}/${path[i]}" ${Dir}`);
-      console.log(path[i])
       sendMessage(`Se envio el archivo ${path[i]}`, mainWindow);
     } catch (error) {
       sendMessage(`Error al enviar el archivo ${path[i]}`, mainWindow);
@@ -167,7 +166,6 @@ const changeDevice = (device) => {
 };
 
 configFunction();
-
 
 module.exports = {
   browserDevice,
