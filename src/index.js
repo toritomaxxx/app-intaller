@@ -23,13 +23,15 @@ const createWindow = () => {
       nodeIntegration: true,
       contextIsolation: true,
       enableRemoteModule: true,
-      devTools: false,
+      devTools: true,
     },
     resizable: false,
+
   });
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
-
+  mainWindow.webContents.openDevTools();
+  
 };
 
 app.whenReady().then(() => {

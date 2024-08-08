@@ -98,16 +98,17 @@ const getConfigJson = () => {
 function installApps(pathConfig, path, mainWindow) {
   for (let i = 0; i < path.length; i++) {
     try {
-      execSync(`${ADB} -s ${movil} install ${pathConfig}/${path[i]}`);
+      execSync(`${ADB} -s ${movil} install ${pathConfig}/${path[i]}`)
       sendMessage(`Se instalo la aplicacion ${path[i]}`, mainWindow);
     } catch (error) {
       sendMessage(`Error al instalar la aplicacion ${path[i]}`, mainWindow);
     }
   }
+  sendMessage("Se instalaron todas las aplicaciones", mainWindow);
 }
 
 function sendDocs(pathConfig, path, mainWindow) {
-  const Dir = "/storage/emulated/0/documents";
+  const Dir = "/storage/emulated/0/documents/manuales";
   try {
     execSync(`${ADB} -s ${movil} shell mkdir -p ${Dir}`);
     sendMessage("Se creo el directorio", mainWindow);
@@ -122,22 +123,25 @@ function sendDocs(pathConfig, path, mainWindow) {
       sendMessage(`Error al enviar el archivo ${path[i]}`, mainWindow);
     }
   }
+  sendMessage("Se enviaron todos los documentos", mainWindow);
 }
 function sendBackgrounds(pathConfig, path, mainWindow) {
-  const Dir = "/storage/emulated/0/Pictures";
+  const Dir = "/storage/emulated/0/pictures/backgrounds";
   try {
     execSync(`${ADB} -s ${movil} shell mkdir -p ${Dir}`);
-    sendMessage("Se creo el directorio", mainWindow);
-  } catch (error) {
-    sendMessage("Error al crear el directorio", mainWindow);
-  }
+     sendMessage("Se creo el directorio", mainWindow);
+   } catch (error) {
+     sendMessage("Error al crear el directorio", mainWindow);
+   }
   for (let i = 0; i < path.length; i++) {
     try {
-      execSync(`${ADB}  push "${pathConfig}/${path[i]}" ${Dir}`);
+      execSync(`${ADB}  -s ${movil} push "${pathConfig}/${path[i]}" ${Dir}`);
       sendMessage(`Se envio el archivo ${path[i]}`, mainWindow);
     } catch (error) {
       sendMessage(`Error al enviar el archivo ${path[i]}`, mainWindow);
+      console.log(error);
     }
+    sendMessage("Se enviaron todas las imagenes", mainWindow);
   }
 }
 
@@ -155,9 +159,10 @@ const sendOrder = (order, mainWindow) => {
   } else if (order === "backgrounds") {
     sendBackgrounds(backgrounds, backgroundsFiles, mainWindow);
   } else if (order === "all") {
-    installApps(apk, apkFiles);
-    sendDocs(docs, docsFiles);
+    installApps(apk, apkFiles, mainWindow);
+    sendDocs(docs, docsFiles, mainWindow);
     sendBackgrounds(backgrounds, backgroundsFiles, mainWindow);
+    sendMessage("Proceso finalizado", mainWindow);
   }
 };
 
