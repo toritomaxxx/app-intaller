@@ -20,7 +20,8 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
-    "electron": "31.2.0"
+    "electron": "31.2.0",
+    "electron-builder": "^24.13.3"
   },
   "keywords": [],
   "author": {
@@ -29,7 +30,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-builder": "^24.13.3",
     "electron-squirrel-startup": "^1.0.1"
   }
 }

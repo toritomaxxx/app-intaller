@@ -24,6 +24,7 @@ function configFunction() {
     pathJsonConfig = path.join(homeDir, ".config", "app-installer");
   }
   fs.mkdirSync(pathJsonConfig, { recursive: true });
+  
   pathJsonConfigComplete = path.join(pathJsonConfig, "config.json");
   if (!fs.existsSync(pathJsonConfigComplete)) {
     fs.writeFileSync(pathJsonConfigComplete, JSON.stringify({}));
