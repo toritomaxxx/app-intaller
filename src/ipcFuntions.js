@@ -1,14 +1,20 @@
 const { execSync } = require("child_process");
+const { env } = require("process");
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const adbWindows = "./src/ADB/Windows/adb.exe";
+let adbWindowsProduction = "";
 const adbLinux = "./src/ADB/Linux/adb";
+let adbLinuxProduction = "";
 let deviceList = [];
 let ADB = "";
 let pathJsonConfig = "";
 let pathJsonConfigComplete = "";
 let movil = "";
+const isDevelopment = process.env.NODE_ENV === "development";
+
+const { app } = require("electron");
 
 function configFunction() {
   const homeDir = process.env.HOME;
@@ -20,11 +26,68 @@ function configFunction() {
       "app-installer",
       "config"
     );
+    if (!isDevelopment) {
+      adbWindowsProduction = path.join(
+        homeDir,
+        ".config",
+        "app-installer",
+        "resources",
+        "ADB",
+        "Windows",
+        "adb.exe"
+      );
+    }
   } else {
     pathJsonConfig = path.join(homeDir, ".config", "app-installer");
+    if (!isDevelopment) {
+      adbLinuxProduction = path.join(
+        homeDir,
+        ".config",
+        "app-installer",
+        "resources",
+        "ADB",
+        "Linux",
+        "adb"
+      );
+    }
   }
   fs.mkdirSync(pathJsonConfig, { recursive: true });
-  
+
+  if (!isDevelopment) {
+    if (os.platform() === "linux") {
+      const sourceDir = path.join(
+        app.getAppPath().replace("app.asar", ""),
+        "ADB"
+      );
+      const destDir = path.join(
+        homeDir,
+        ".config",
+        "app-installer",
+        "resources",
+        "ADB"
+      );
+      if (!fs.existsSync(destDir)) {
+        fs.cpSync(sourceDir, destDir, { recursive: true });
+      }
+    }
+    else if (os.platform() === "win32") {
+      const sourceDir = path.join(
+        app.getAppPath().replace("app.asar", ""),
+        "ADB"
+      );
+      const destDir = path.join(
+        homeDir,
+        ".config",
+        "app-installer",
+        "resources",
+        "ADB"
+      );
+      if (!fs.existsSync(destDir)) {
+        fs.cpSync(sourceDir, destDir, { recursive: true });
+      }
+    }
+  }
+
   pathJsonConfigComplete = path.join(pathJsonConfig, "config.json");
   if (!fs.existsSync(pathJsonConfigComplete)) {
     fs.writeFileSync(pathJsonConfigComplete, JSON.stringify({}));
@@ -34,9 +97,17 @@ function configFunction() {
 const browserDevice = () => {
   deviceList = [];
   if (os.platform() === "win32") {
-    ADB = `"${adbWindows}"`;
+    if (isDevelopment) {
+      ADB = `"${adbWindows}"`;
+    } else {
+      ADB = `"${adbWindowsProduction}"`;
+    }
   } else {
-    ADB = adbLinux;
+    if (isDevelopment) {
+      ADB = adbLinux;
+    } else {
+      ADB = adbLinuxProduction;
+    }
   }
 
   try {
@@ -99,7 +170,7 @@ const getConfigJson = () => {
 function installApps(pathConfig, path, mainWindow) {
   for (let i = 0; i < path.length; i++) {
     try {
-      execSync(`${ADB} -s ${movil} install ${pathConfig}/${path[i]}`)
+      execSync(`${ADB} -s ${movil} install ${pathConfig}/${path[i]}`);
       sendMessage(`Se instalo la aplicacion ${path[i]}`, mainWindow);
     } catch (error) {
       sendMessage(`Error al instalar la aplicacion ${path[i]}`, mainWindow);
@@ -130,10 +201,10 @@ function sendBackgrounds(pathConfig, path, mainWindow) {
   const Dir = "/storage/emulated/0/pictures/backgrounds";
   try {
     execSync(`${ADB} -s ${movil} shell mkdir -p ${Dir}`);
-     sendMessage("Se creo el directorio", mainWindow);
-   } catch (error) {
-     sendMessage("Error al crear el directorio", mainWindow);
-   }
+    sendMessage("Se creo el directorio", mainWindow);
+  } catch (error) {
+    sendMessage("Error al crear el directorio", mainWindow);
+  }
   for (let i = 0; i < path.length; i++) {
     try {
       execSync(`${ADB}  -s ${movil} push "${pathConfig}/${path[i]}" ${Dir}`);
@@ -149,7 +220,9 @@ function sendBackgrounds(pathConfig, path, mainWindow) {
 const sendOrder = (order, mainWindow) => {
   const apk = JSON.parse(fs.readFileSync(pathJsonConfigComplete)).apk;
   const docs = JSON.parse(fs.readFileSync(pathJsonConfigComplete)).docs;
-  const backgrounds = JSON.parse(fs.readFileSync(pathJsonConfigComplete)).backgrounds;
+  const backgrounds = JSON.parse(
+    fs.readFileSync(pathJsonConfigComplete)
+  ).backgrounds;
   const apkFiles = fs.readdirSync(apk);
   const docsFiles = fs.readdirSync(docs);
   const backgroundsFiles = fs.readdirSync(backgrounds);

@@ -5,11 +5,12 @@
   "description": "Esta es una aplicacion de escritorio que permite una facil configuracion de tu dispositico android con una comoda interfaz grafica",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "NODE_ENV=development electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "build" : "electron-builder"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
@@ -22,6 +23,37 @@
     "@electron/fuses": "^1.8.0",
     "electron": "31.2.0",
     "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.example.app",
+    "productName": "app-installer",
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "msi",
+        "squirrel",
+        "zip",
+        "portable",
+        "appx",
+        "exe"
+
+      ]
+    },
+    "extraResources": [
+      {
+        "from": "./src/ADB",
+        "to": "ADB"
+      }
+    ],
+    "directories": {
+      "buildResources": "build"
+    }
   },
   "keywords": [],
   "author": {
